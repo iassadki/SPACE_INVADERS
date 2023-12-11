@@ -39,8 +39,10 @@ public class MainGL extends GLCanvas implements GLEventListener {
 
     private void createCubes() {
         float spacing = 2.0f; // Adjust the spacing between cubes
+        float initialX = -7.0f; // Value for the x coordinate of the first cube
+
         for (int i = 0; i < 8; i++) {
-            float x = i * spacing;
+            float x = initialX + i * spacing;
             //float y = 0.0f;
             //float z = -15.0f;
             //float size = 2.0f;

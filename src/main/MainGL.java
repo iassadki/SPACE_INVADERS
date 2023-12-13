@@ -16,7 +16,8 @@ import com.jogamp.opengl.util.Animator;
 
 public class MainGL extends GLCanvas implements GLEventListener {
 
-    private ArrayList<GraphicalObject> objects3D;
+    private Cube cube;
+    private ArrayList<GraphicalObject> objects3D; // Liste des objets 3D, cubes ennemis, à afficher
 
     public static void main(String[] args) {
         GLCanvas canvas = new MainGL();
@@ -39,17 +40,21 @@ public class MainGL extends GLCanvas implements GLEventListener {
 
     private void createCubes() {
         float spacing = 2.0f; // Adjust the spacing between cubes
-        float initialX = -7.0f; // Value for the x coordinate of the first cube
+        float initialCubeX = -5.0f; // Value for the x coordinate of the first cube
+        float initialCubeY = 1.0f; // Value for the y coordinate of the first cube
 
-        for (int i = 0; i < 8; i++) {
-            float x = initialX + i * spacing;
-            //float y = 0.0f;
-            //float z = -15.0f;
-            //float size = 2.0f;
-            Cube cube = new Cube(x, 4.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f);
-            objects3D.add(cube);
+        // Boucle pour créer des lignes de 5 cubes de haut en bas
+        for (int i = 0; i < 3; i++) {
+            float y = initialCubeY + i * spacing;
+
+            // Boucle pour créer des colonnes de 8 cubes de gauche à droite
+            for (int j = 0; j < 6; j++) {
+                float x = initialCubeX + j * spacing;
+                objects3D.add(new Cube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout d'un cube à la liste objects3D
+            }
         }
     }
+
 
     @Override
     public void display(GLAutoDrawable drawable) {

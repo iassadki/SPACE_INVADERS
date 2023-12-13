@@ -36,6 +36,7 @@ public class MainGL extends GLCanvas implements GLEventListener {
         this.addGLEventListener(this);
         this.objects3D = new ArrayList<>();
         createCubes();
+        createPlayerCube();
     }
 
     private void createCubes() {
@@ -50,11 +51,15 @@ public class MainGL extends GLCanvas implements GLEventListener {
             // Boucle pour créer des colonnes de 8 cubes de gauche à droite
             for (int j = 0; j < 6; j++) {
                 float x = initialCubeX + j * spacing;
-                objects3D.add(new Cube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout d'un cube à la liste objects3D
+                objects3D.add(new Cube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout du cube crée à la liste objects3D
             }
         }
     }
 
+    // Creer le cube d'un joueur, et faire en sorte qu'il s'affiche en bas de l'écran
+    private void createPlayerCube() {
+        objects3D.add(new Cube(0.0f, -5.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f));
+    }
 
     @Override
     public void display(GLAutoDrawable drawable) {

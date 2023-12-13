@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import formes.Cube;
+import formes.EnnemyCube;
 import formes.GraphicalObject;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -13,6 +14,7 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
+import formes.PlayerCube;
 
 public class MainGL extends GLCanvas implements GLEventListener {
 
@@ -24,7 +26,7 @@ public class MainGL extends GLCanvas implements GLEventListener {
         canvas.setPreferredSize(new Dimension(800, 600));
         final JFrame frame = new JFrame();
         frame.getContentPane().add(canvas);
-        frame.setTitle("OpenGL #1");
+        frame.setTitle("SPACE INVADERS");
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -51,14 +53,13 @@ public class MainGL extends GLCanvas implements GLEventListener {
             // Boucle pour créer des colonnes de 8 cubes de gauche à droite
             for (int j = 0; j < 6; j++) {
                 float x = initialCubeX + j * spacing;
-                objects3D.add(new Cube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout du cube crée à la liste objects3D
+                objects3D.add(new EnnemyCube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout du cube crée à la liste objects3D
             }
         }
     }
 
-    // Creer le cube d'un joueur, et faire en sorte qu'il s'affiche en bas de l'écran
     private void createPlayerCube() {
-        objects3D.add(new Cube(0.0f, -5.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f));
+        objects3D.add(new PlayerCube(0.0f, -5.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f));
     }
 
     @Override

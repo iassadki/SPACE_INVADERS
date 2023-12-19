@@ -1,11 +1,12 @@
 package main;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import formes.Cube;
 import formes.EnnemyCube;
 import formes.GraphicalObject;
 import com.jogamp.opengl.GL2;
@@ -14,12 +15,14 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
+import formes.Missile;
 import formes.PlayerCube;
 
-public class MainGL extends GLCanvas implements GLEventListener {
+public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
 
-    private Cube cube;
-    private ArrayList<GraphicalObject> objects3D; // Liste des objets 3D, cubes ennemis, à afficher
+    private ArrayList<GraphicalObject> objects3D; // List of 3D objects to display
+    private PlayerCube playerCube; // Reference to the player cube
+    private ArrayList<Missile> missiles; // List of missiles fired by the player
 
     public static void main(String[] args) {
         GLCanvas canvas = new MainGL();
@@ -36,9 +39,13 @@ public class MainGL extends GLCanvas implements GLEventListener {
 
     public MainGL() {
         this.addGLEventListener(this);
+        this.addKeyListener(this);
+        this.setFocusable(true);
         this.objects3D = new ArrayList<>();
+        this.missiles = new ArrayList<>(); // Initialize the missiles list
         createCubes();
         createPlayerCube();
+        //this.requestFocusInWindow(); // Request focus for the KeyListener
     }
 
     private void createCubes() {
@@ -46,20 +53,29 @@ public class MainGL extends GLCanvas implements GLEventListener {
         float initialCubeX = -5.0f; // Value for the x coordinate of the first cube
         float initialCubeY = 1.0f; // Value for the y coordinate of the first cube
 
-        // Boucle pour créer des lignes de 5 cubes de haut en bas
+        // First loop to create 3 rows of 8 cubes from bottom to top
         for (int i = 0; i < 3; i++) {
             float y = initialCubeY + i * spacing;
 
-            // Boucle pour créer des colonnes de 8 cubes de gauche à droite
+            // Second loop to create 8 cubes from left to right
             for (int j = 0; j < 6; j++) {
                 float x = initialCubeX + j * spacing;
-                objects3D.add(new EnnemyCube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Ajout du cube crée à la liste objects3D
+                objects3D.add(new EnnemyCube(x, y, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f)); // Addition of the enemy cube in the list of object3D
             }
         }
     }
 
     private void createPlayerCube() {
-        objects3D.add(new PlayerCube(0.0f, -5.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f));
+        playerCube = new PlayerCube(0.0f, -5.0f, -15.0f, 0, 0, 0, 0.5f, 1.0f, 1.0f, 1.0f); // Addition of the player cube in the list of object3D
+        objects3D.add(playerCube);
+    }
+
+    private void fireMissile() {
+        // Adjust the initial position of the missile so that it starts from the player cube
+        Missile missile = new Missile(0.0f, -3.0f, -10.0f, 0, 0, 0, 5.0f, 1.0f, 1.0f, 1.0f);
+        //System.out.println("MainGL.fireMissile");
+        missiles.add(missile);
+        objects3D.add(missile);
     }
 
     @Override
@@ -68,11 +84,31 @@ public class MainGL extends GLCanvas implements GLEventListener {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
 
+        // Update the position of missiles and remove them if they go out of bounds
+        updateMissiles();
+
         for (GraphicalObject obj : objects3D) {
             gl.glPushMatrix();
             obj.display(gl);
             gl.glPopMatrix();
         }
+    }
+
+    private void updateMissiles() {
+        ArrayList<Missile> missilesToRemove = new ArrayList<>();
+
+        for (Missile missile : missiles) {
+            missile.move(1.0f); // Adjust the speed as needed
+
+            // Check if the missile is out of bounds, and mark it for removal
+            if (missile.getY() > 10.0f) { // Adjust the threshold as needed
+                missilesToRemove.add(missile);
+            }
+        }
+
+        // Remove missiles that are out of bounds
+        missiles.removeAll(missilesToRemove);
+        objects3D.removeAll(missilesToRemove);
     }
 
     @Override
@@ -83,11 +119,13 @@ public class MainGL extends GLCanvas implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
+        missiles = new ArrayList<>(); // Initialise the missiles list
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
+        missiles = new ArrayList<>(); // Ajoutez cette ligne pour initialiser la liste missiles
     }
 
     @Override
@@ -100,5 +138,36 @@ public class MainGL extends GLCanvas implements GLEventListener {
         glu.gluPerspective(45.0, (float) width / height, 0.1, 100.0);
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Fire a missile when the space bar is pressed
+        if (e.getKeyChar() == ' ') {
+            //System.out.println("MainGL.keyTyped");
+            fireMissile();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+//        if (key == KeyEvent.VK_Q) {
+//            playerCube.translate(-3.0f, 0.0f, 0.0f);
+//        }
+//
+//        if (key == KeyEvent.VK_D) {
+//            playerCube.translate(3.0f, 0.0f, 0.0f);
+//        }
+
+        if (key == KeyEvent.VK_SPACE) {
+            fireMissile();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Not used for this functionality
     }
 }

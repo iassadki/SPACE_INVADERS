@@ -12,4 +12,11 @@ public class PlayerCube extends Cube {
         super.display_normalized(gl);
     }
 
+    public void move(float speed) {
+        // Déplacer le missile vers le haut (dans l'axe y)
+        translateY(speed);
+    }
+
+    private void translateY(float speed) {
+    }
 }

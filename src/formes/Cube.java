@@ -35,5 +35,4 @@ public class Cube extends GraphicalObject
         for (Square face: faces)
             face.display(gl);
     }
-
 }

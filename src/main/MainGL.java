@@ -7,14 +7,15 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import formes.EnnemyCube;
-import formes.GraphicalObject;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
+
+import formes.EnnemyCube;
+import formes.GraphicalObject;
 import formes.Missile;
 import formes.PlayerCube;
 
@@ -98,10 +99,10 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         ArrayList<Missile> missilesToRemove = new ArrayList<>();
 
         for (Missile missile : missiles) {
-            missile.move(1.0f); // Adjust the speed as needed
+            missile.move(-10.0f); // Speed of the missile
 
             // Check if the missile is out of bounds, and mark it for removal
-            if (missile.getY() > 10.0f) { // Adjust the threshold as needed
+            if (missile.getY() > 10.0f) { // If the missile is out of bounds
                 missilesToRemove.add(missile);
             }
         }
@@ -153,17 +154,19 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-//        if (key == KeyEvent.VK_Q) {
-//            playerCube.translate(-3.0f, 0.0f, 0.0f);
-//        }
-//
-//        if (key == KeyEvent.VK_D) {
-//            playerCube.translate(3.0f, 0.0f, 0.0f);
-//        }
+        if (key == KeyEvent.VK_Q) {
+            playerCube.translateX(-playerCube.getMoveSpeed()); // Déplacer vers la gauche
+        }
+
+        if (key == KeyEvent.VK_D) {
+            playerCube.translateX(playerCube.getMoveSpeed()); // Déplacer vers la droite
+        }
 
         if (key == KeyEvent.VK_SPACE) {
             fireMissile();
         }
+
+        this.repaint();
     }
 
     @Override
@@ -171,3 +174,4 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Not used for this functionality
     }
 }
+

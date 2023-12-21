@@ -26,12 +26,8 @@ public class Missile extends GraphicalObject {
 
     public void move(float speed) {
         // Move the missile upwards (along the y-axis)
-        translateY(speed);
-    }
-
-    private void translateY(float speed) {
-        // Move the missile upwards
         translate(0.0f, speed, 0.0f);
+        //translateY(speed);
     }
 
     @Override

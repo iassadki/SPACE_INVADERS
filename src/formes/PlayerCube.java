@@ -4,7 +4,7 @@ import com.jogamp.opengl.GL2;
 
 public class PlayerCube extends Cube {
 
-    private float moveSpeed = 0.1f; // Ajustez la vitesse de déplacement
+    private float moveSpeed = 1f; // Ajustez la vitesse de déplacement
     private float x; // Nouvelle variable pour la position en x
 
     public PlayerCube(float pX, float pY, float pZ, float angX, float angY, float angZ, float scale, float r, float g, float b) {
@@ -18,6 +18,10 @@ public class PlayerCube extends Cube {
 
     public float getMoveSpeed() {
         return moveSpeed;
+    }
+
+    public float getX() {
+    	return x;
     }
 
     @Override

@@ -4,6 +4,9 @@ import com.jogamp.opengl.GL2;
 
 public class Missile extends GraphicalObject {
 
+    private float moveSpeedMissile = 1f; // Ajustez la vitesse de déplacement
+    private float y; // Nouvelle variable pour la position en y
+
     public Missile(float pX, float pY, float pZ,
                    float angX, float angY, float angZ,
                    float scale,
@@ -24,10 +27,22 @@ public class Missile extends GraphicalObject {
         gl.glEnd();
     }
 
+    public float getY() {
+        return y;
+    }
+
+    public float getMoveSpeedMissile() {
+        return moveSpeedMissile;
+    }
+
     public void move(float speed) {
         // Move the missile upwards (along the y-axis)
-        translate(0.0f, speed, 0.0f);
+        //translateY(0.0f, speed, 0.0f);
+        y += speed; // Mise à jour de la position en x
         //translateY(speed);
+    }
+
+    public void translateY(float v, float speed, float v1) {
     }
 
     @Override

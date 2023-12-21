@@ -72,9 +72,8 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     }
 
     private void fireMissile() {
-        // Adjust the initial position of the missile so that it starts from the player cube
+        // Ajuster la position initiale du missile pour qu'il parte du joueur
         Missile missile = new Missile(playerCube.getX(), playerCube.getY(), playerCube.getZ() - 5.0f, 0, 0, 0, 5.0f, 1.0f, 1.0f, 1.0f);
-        //System.out.println("MainGL.fireMissile");
         missiles.add(missile);
         objects3D.add(missile);
     }
@@ -99,10 +98,10 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         ArrayList<Missile> missilesToRemove = new ArrayList<>();
 
         for (Missile missile : missiles) {
-            missile.move(missile.getMoveSpeedMissile()); // Utilisez la logique de déplacement du missile
+            missile.move(missile.getMoveSpeedMissile());
 
             // Check if the missile is out of bounds, and mark it for removal
-            if (missile.getY() > 10.0f) { // If the missile is out of bounds
+            if (missile.getY() > 10.0f) {
                 missilesToRemove.add(missile);
             }
         }

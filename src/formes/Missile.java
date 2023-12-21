@@ -12,6 +12,7 @@ public class Missile extends GraphicalObject {
                    float scale,
                    float r, float g, float b) {
         super(pX, pY, pZ, angX, angY, angZ, scale, r, g, b);
+        this.y = pY; // Initialiser la position en y
     }
 
     @Override
@@ -36,13 +37,12 @@ public class Missile extends GraphicalObject {
     }
 
     public void move(float speed) {
-        // Move the missile upwards (along the y-axis)
-        //translateY(0.0f, speed, 0.0f);
-        y += speed; // Mise à jour de la position en x
-        //translateY(speed);
+        // Déplacer le missile vers le haut (le long de l'axe Y)
+        translateY(speed, 0.0f, 0.0f);
     }
 
-    public void translateY(float v, float speed, float v1) {
+    public void translateY(float speed, float v, float v1) {
+        y += speed;
     }
 
     @Override

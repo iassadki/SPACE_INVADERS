@@ -96,6 +96,7 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
 
     private void updateMissiles() {
         ArrayList<Missile> missilesToRemove = new ArrayList<>();
+        ArrayList<GraphicalObject> objectsToRemove = new ArrayList<>();
 
         for (Missile missile : missiles) {
             missile.move(missile.getMoveSpeedMissile());
@@ -103,35 +104,31 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
             // Check if the missile is out of bounds, and mark it for removal
             if (missile.getY() > 10.0f) {
                 missilesToRemove.add(missile);
-            }
-        }
+            } else {
+                // Check for collisions with enemy cubes
+                boolean missileCollided = false; // Variable to check if the missile collided with a cube
 
-        // Remove missiles that are out of bounds
-        missiles.removeAll(missilesToRemove);
-        objects3D.removeAll(missilesToRemove);
+                for (GraphicalObject obj : objects3D) {
+                    if (obj instanceof EnnemyCube) {
+                        EnnemyCube ennemyCube = (EnnemyCube) obj;
+                        float cubeX = ennemyCube.getX();
+                        float cubeY = ennemyCube.getY();
+                        float missileX = missile.getX();
+                        float missileY = missile.getY();
 
-        // Check for collisions with enemy cubes
-        ArrayList<GraphicalObject> objectsToRemove = new ArrayList<>();
-        for (GraphicalObject obj : objects3D) {
-            if (obj instanceof EnnemyCube) {
-                EnnemyCube ennemyCube = (EnnemyCube) obj;
-                float cubeX = ennemyCube.getX();
-                float cubeY = ennemyCube.getY();
-
-                for (Missile missile : missiles) {
-                    float missileX = missile.getX();
-                    float missileY = missile.getY();
-
-                    // Check if the missile touches the enemy cube
-                    if (missileY + 0.5f > cubeY - 0.5f && missileY - 0.5f < cubeY + 0.5f && missileX + 0.5f > cubeX - 0.5f && missileX - 0.5f < cubeX + 0.5f) {
-                        System.out.println("MainGL.missileTouched");
-                        objectsToRemove.add(obj);
-                        missilesToRemove.add(missile);
-                        if (objects3D.size() == 1) {
-                            System.out.println("Game Over");
-                            System.exit(0);
+                        // Check if the missile touches the enemy cube
+                        if (missileY + 0.5f > cubeY - 0.5f && missileY - 0.5f < cubeY + 0.5f && missileX + 0.5f > cubeX - 0.5f && missileX - 0.5f < cubeX + 0.5f) {
+                            System.out.println("MainGL.missileTouched");
+                            objectsToRemove.add(obj);
+                            missileCollided = true; // Set the flag to true if collision occurred
+                            break; // Exit the loop since we only want to remove one cube
                         }
                     }
+                }
+
+                // Remove the missile if it collided with a cube
+                if (missileCollided) {
+                    missilesToRemove.add(missile);
                 }
             }
         }
@@ -139,6 +136,12 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Remove collided missiles and cubes
         missiles.removeAll(missilesToRemove);
         objects3D.removeAll(objectsToRemove);
+
+        // Check for game over
+        if (objects3D.isEmpty()) {
+            System.out.println("Game Over");
+            System.exit(0);
+        }
     }
 
     private void removeEnemyCube(float missileX, float missileY) {
@@ -157,7 +160,6 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
             }
         }
     }
-
 
     @Override
     public void dispose(GLAutoDrawable arg0) {

@@ -72,7 +72,7 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     }
 
     private void fireMissile() {
-        // Ajuster la position initiale du missile pour qu'il parte du joueur
+        // Adjust the initial position of the missile to start from the player
         Missile missile = new Missile(playerCube.getX(), playerCube.getY(), playerCube.getZ() - 5.0f, 0, 0, 0, 5.0f, 1.0f, 1.0f, 1.0f);
         missiles.add(missile);
         objects3D.add(missile);
@@ -109,7 +109,55 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Remove missiles that are out of bounds
         missiles.removeAll(missilesToRemove);
         objects3D.removeAll(missilesToRemove);
+
+        // Check for collisions with enemy cubes
+        ArrayList<GraphicalObject> objectsToRemove = new ArrayList<>();
+        for (GraphicalObject obj : objects3D) {
+            if (obj instanceof EnnemyCube) {
+                EnnemyCube ennemyCube = (EnnemyCube) obj;
+                float cubeX = ennemyCube.getX();
+                float cubeY = ennemyCube.getY();
+
+                for (Missile missile : missiles) {
+                    float missileX = missile.getX();
+                    float missileY = missile.getY();
+
+                    // Check if the missile touches the enemy cube
+                    if (missileY + 0.5f > cubeY - 0.5f && missileY - 0.5f < cubeY + 0.5f && missileX + 0.5f > cubeX - 0.5f && missileX - 0.5f < cubeX + 0.5f) {
+                        System.out.println("MainGL.missileTouched");
+                        objectsToRemove.add(obj);
+                        missilesToRemove.add(missile);
+                        if (objects3D.size() == 1) {
+                            System.out.println("Game Over");
+                            System.exit(0);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Remove collided missiles and cubes
+        missiles.removeAll(missilesToRemove);
+        objects3D.removeAll(objectsToRemove);
     }
+
+    private void removeEnemyCube(float missileX, float missileY) {
+        for (int i = 0; i < objects3D.size(); i++) {
+            GraphicalObject obj = objects3D.get(i);
+            if (obj instanceof EnnemyCube) {
+                EnnemyCube ennemyCube = (EnnemyCube) obj;
+                float cubeX = ennemyCube.getX();
+                float cubeY = ennemyCube.getY();
+
+                // Vérifiez si le missile touche le cube ennemi
+                if (missileY > cubeY && missileY < cubeY + 1.0f && missileX > cubeX - 0.5f && missileX < cubeX + 0.5f) {
+                    objects3D.remove(i);
+                    return; // Sortez de la méthode après avoir supprimé le cube
+                }
+            }
+        }
+    }
+
 
     @Override
     public void dispose(GLAutoDrawable arg0) {
@@ -119,13 +167,13 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
-        missiles = new ArrayList<>(); // Initialise the missiles list
+        missiles = new ArrayList<>(); // Initialize the missiles list
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glDepthFunc(GL2.GL_LEQUAL);
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
-        missiles = new ArrayList<>(); // Ajoutez cette ligne pour initialiser la liste missiles
+        missiles = new ArrayList<>(); // Add this line to initialize the missiles list
     }
 
     @Override
@@ -154,12 +202,12 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_Q) {
-            playerCube.translateX(-playerCube.getMoveSpeed()); // Déplacer vers la gauche
+            playerCube.translateX(-playerCube.getMoveSpeed()); // Move to the left
             System.out.println("CoorX Left : " + playerCube.getX());
         }
 
         if (key == KeyEvent.VK_D) {
-            playerCube.translateX(playerCube.getMoveSpeed()); // Déplacer vers la droite
+            playerCube.translateX(playerCube.getMoveSpeed()); // Move to the right
             System.out.println("CoorX Right : " + playerCube.getX());
         }
 
@@ -175,4 +223,3 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Not used for this functionality
     }
 }
-

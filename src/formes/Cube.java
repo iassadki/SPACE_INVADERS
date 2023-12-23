@@ -6,7 +6,6 @@ import com.jogamp.opengl.GL2;
 
 public class Cube extends GraphicalObject
 {
-
     private ArrayList<Square> faces;
 
     public Cube(float pX, float pY, float pZ,

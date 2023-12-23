@@ -18,6 +18,7 @@ import formes.EnnemyCube;
 import formes.GraphicalObject;
 import formes.Missile;
 import formes.PlayerCube;
+import ui.DialogBoxes.DialogBoxEnd;
 
 public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
 
@@ -128,7 +129,6 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
 
                         // Check if the missile touches the enemy cube
                         if (missileY + 0.5f > cubeY - 0.5f && missileY - 0.5f < cubeY + 0.5f && missileX + 0.5f > cubeX - 0.5f && missileX - 0.5f < cubeX + 0.5f) {
-                            System.out.println("MainGL.missileTouched");
                             objectsToRemove.add(obj);
                             missileCollided = true; // Set the flag to true if collision occurred
                             break; // Exit the loop since we only want to remove one cube
@@ -146,36 +146,15 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Remove collided missiles and cubes
         missiles.removeAll(missilesToRemove);
         objects3D.removeAll(objectsToRemove);
-        System.out.println("Cubes ennemis restants " + objects3D.size());
 
-
-        // Check for game over
+        // Check for game over, if there is only one cube left (the playersCube). Display a
         if (objects3D.size() == 1) {
-            System.out.println("Game Over");
-            System.exit(0);
+            FinishedGame();
         }
     }
 
-//    private void removeEnemyCube(float missileX, float missileY) {
-//        for (int i = 0; i < objects3D.size(); i++) {
-//            GraphicalObject obj = objects3D.get(i);
-//            if (obj instanceof EnnemyCube) {
-//                EnnemyCube ennemyCube = (EnnemyCube) obj;
-//                float cubeX = ennemyCube.getX();
-//                float cubeY = ennemyCube.getY();
-//
-//                // Vérifiez si le missile touche le cube ennemi
-//                if (missileY > cubeY && missileY < cubeY + 1.0f && missileX > cubeX - 0.5f && missileX < cubeX + 0.5f) {
-//                    objects3D.remove(i);
-//                    return; // Sortez de la méthode après avoir supprimé le cube
-//                }
-//            }
-//        }
-//    }
-
     @Override
     public void dispose(GLAutoDrawable arg0) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -206,7 +185,6 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     public void keyTyped(KeyEvent e) {
         // Fire a missile when the space bar is pressed
         if (e.getKeyChar() == ' ') {
-            //System.out.println("MainGL.keyTyped");
             fireMissile();
         }
     }
@@ -215,27 +193,35 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
+        // Keyboard event management
         if (key == KeyEvent.VK_Q) {
-            playerCube.translateX(-playerCube.getMoveSpeed()); // Move to the left
-            System.out.println("CoorX Left : " + playerCube.getX());
-            System.out.println("Cubes ennemis restants" + objects3D.size());
+            playerCube.translateX(-playerCube.getMoveSpeed()); // Move the cube to the left
+            //System.out.println("CoorX Left : " + playerCube.getX());
         }
 
         if (key == KeyEvent.VK_D) {
-            playerCube.translateX(playerCube.getMoveSpeed()); // Move to the right
-            System.out.println("CoorX Right : " + playerCube.getX());
-            System.out.println("Cubes ennemis restants" + objects3D.size());
+            playerCube.translateX(playerCube.getMoveSpeed()); // Move the cube to the right
+            //System.out.println("CoorX Right : " + playerCube.getX());
         }
 
         if (key == KeyEvent.VK_SPACE) {
-            fireMissile();
+            fireMissile(); // Fire a missile when the space bar is pressed
         }
 
-        this.repaint();
+        this.repaint(); // Refresh the display
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        // Not used for this functionality
+        // Not used for this game
+    }
+
+       // if (map.isFinish(newRow, newCol)) {
+    public boolean FinishedGame() {
+        // Afficher la boîte de dialogue DialogBoxEnd
+        DialogBoxEnd dialbox = new DialogBoxEnd();
+        dialbox.showDialog();
+
+        return false;
     }
 }

@@ -4,15 +4,15 @@ import com.jogamp.opengl.GL2;
 
 public class Missile extends GraphicalObject {
 
-    private float moveSpeedMissile = 1f; // Ajustez la vitesse de déplacement
-    private float y; // Nouvelle variable pour la position en y
+    private float moveSpeedMissile = 1f; // Speed of the missile
+    private float y; // Variable for the position in y
 
     public Missile(float pX, float pY, float pZ,
                    float angX, float angY, float angZ,
                    float scale,
                    float r, float g, float b) {
         super(pX, pY, pZ, angX, angY, angZ, scale, r, g, b);
-        this.y = pY; // Initialiser la position en y
+        this.y = pY; // Initialize the y position of the missile
     }
 
     @Override
@@ -36,6 +36,7 @@ public class Missile extends GraphicalObject {
         return moveSpeedMissile;
     }
 
+    // Method for moving the missile, from the bottom to the top of the screen, with a given speed
     public void move(float speed) {
         // Déplacer le missile vers le haut (le long de l'axe Y)
         translateY(speed, 0.0f, 0.0f);

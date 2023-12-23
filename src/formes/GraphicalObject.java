@@ -2,8 +2,8 @@ package formes;
 
 import com.jogamp.opengl.GL2;
 
-public abstract class GraphicalObject
-{
+public abstract class GraphicalObject {
+
     private float posX, posY, posZ;
     private float angX, angY, angZ;
     private float r, g, b;
@@ -12,8 +12,7 @@ public abstract class GraphicalObject
     public GraphicalObject(float pX, float pY, float pZ,
                            float angX, float angY, float angZ,
                            float scale,
-                           float r, float g, float b)
-    {
+                           float r, float g, float b) {
         this.posX = pX;
         this.posY = pY;
         this.posZ = pZ;
@@ -28,8 +27,7 @@ public abstract class GraphicalObject
 
     public abstract void display_normalized(GL2 gl);
 
-    public void display(GL2 gl)
-    {
+    public void display(GL2 gl) {
         gl.glPushMatrix();
         gl.glTranslatef(this.posX, this.posY, this.posZ);
         gl.glRotatef(this.angX, 1.0f, 0.0f, 0.0f);
@@ -41,29 +39,27 @@ public abstract class GraphicalObject
         gl.glPopMatrix();
     }
 
-    public void rotate(float aX,float aY,float aZ)
-    {
+    public void rotate(float aX, float aY, float aZ) {
         this.angX += aX;
         this.angY += aY;
         this.angZ += aZ;
     }
 
-    public void translate(float pX,float pY,float pZ)
-    {
+    public void translate(float pX, float pY, float pZ) {
         this.angX += pX;
         this.angY += pY;
         this.angZ += pZ;
     }
 
     public float getX() {
-    	return this.posX;
+        return this.posX;
     }
 
     public float getY() {
-    	return this.posY;
+        return this.posY;
     }
 
     public float getZ() {
-    	return this.posZ;
+        return this.posZ;
     }
 }

@@ -4,15 +4,14 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 
-public class Cube extends GraphicalObject
-{
+public class Cube extends GraphicalObject {
+
     private ArrayList<Square> faces;
 
     public Cube(float pX, float pY, float pZ,
                 float angX, float angY, float angZ,
                 float scale,
-                float r, float g, float b)
-    {
+                float r, float g, float b) {
         super(pX, pY, pZ, angX, angY, angZ, scale, r, g, b);
         faces = new ArrayList<Square>();
         // Front face
@@ -29,9 +28,8 @@ public class Cube extends GraphicalObject
         faces.add(new Square(0, -1, 0, 90, 0, 0, 1, 0.3f, 0.8f, 0.7f));
     }
 
-    public void display_normalized(GL2 gl)
-    {
-        for (Square face: faces)
+    public void display_normalized(GL2 gl) {
+        for (Square face : faces)
             face.display(gl);
     }
 }

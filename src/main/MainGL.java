@@ -43,11 +43,10 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         this.addGLEventListener(this);
         this.addKeyListener(this);
         this.setFocusable(true);
-        this.objects3D = new ArrayList<>();
+        this.objects3D = new ArrayList<>(); // Initialize the list of 3D objects
         this.missiles = new ArrayList<>(); // Initialize the missiles list
         createCubes();
         createPlayerCube();
-        //this.requestFocusInWindow(); // Request focus for the KeyListener
     }
 
     private void createCubes() {
@@ -73,10 +72,9 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
     }
 
     private void fireMissile() {
-        // Adjust the initial position of the missile to start from the player
+        // Adjust the initial position of the missile to start from the player cube
         Missile missile = new Missile(playerCube.getX(), playerCube.getY(), playerCube.getZ() - 5.0f, 0, 0, 0, 5.0f, 1.0f, 1.0f, 1.0f);
         missiles.add(missile);
-        //objects3D.add(missile);
     }
 
     @Override

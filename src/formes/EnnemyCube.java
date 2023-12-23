@@ -4,7 +4,7 @@ import com.jogamp.opengl.GL2;
 
 public class EnnemyCube extends Cube {
 
-    private float y; // Nouvelle variable pour la position en y
+    private float y; // Variable for the position in y
 
     public EnnemyCube(float pX, float pY, float pZ, float angX, float angY, float angZ, float scale, float r, float g, float b) {
         super(pX, pY, pZ, angX, angY, angZ, scale, r, g, b);

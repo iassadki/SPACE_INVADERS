@@ -14,10 +14,10 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.Animator;
 
-import formes.EnnemyCube;
-import formes.GraphicalObject;
-import formes.Missile;
-import formes.PlayerCube;
+import shapes.EnnemyCube;
+import shapes.GraphicalObject;
+import shapes.Missile;
+import shapes.PlayerCube;
 import ui.DialogBoxes.DialogBoxEnd;
 
 public class MainGL extends GLCanvas implements GLEventListener, KeyListener {

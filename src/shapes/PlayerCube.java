@@ -1,4 +1,4 @@
-package formes;
+package shapes;
 
 import com.jogamp.opengl.GL2;
 

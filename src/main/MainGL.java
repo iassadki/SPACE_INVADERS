@@ -75,7 +75,7 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Adjust the initial position of the missile to start from the player
         Missile missile = new Missile(playerCube.getX(), playerCube.getY(), playerCube.getZ() - 5.0f, 0, 0, 0, 5.0f, 1.0f, 1.0f, 1.0f);
         missiles.add(missile);
-        objects3D.add(missile);
+        //objects3D.add(missile);
     }
 
     @Override
@@ -87,9 +87,19 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Update the position of missiles and remove them if they go out of bounds
         updateMissiles();
 
+        // Display other 3D objects
         for (GraphicalObject obj : objects3D) {
+            if (!(obj instanceof Missile)) { // Exclude missiles from display
+                gl.glPushMatrix();
+                obj.display(gl);
+                gl.glPopMatrix();
+            }
+        }
+
+        // Display missiles
+        for (Missile missile : missiles) {
             gl.glPushMatrix();
-            obj.display(gl);
+            missile.display(gl);
             gl.glPopMatrix();
         }
     }
@@ -136,30 +146,32 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         // Remove collided missiles and cubes
         missiles.removeAll(missilesToRemove);
         objects3D.removeAll(objectsToRemove);
+        System.out.println("Cubes ennemis restants " + objects3D.size());
+
 
         // Check for game over
-        if (objects3D.isEmpty()) {
+        if (objects3D.size() == 1) {
             System.out.println("Game Over");
             System.exit(0);
         }
     }
 
-    private void removeEnemyCube(float missileX, float missileY) {
-        for (int i = 0; i < objects3D.size(); i++) {
-            GraphicalObject obj = objects3D.get(i);
-            if (obj instanceof EnnemyCube) {
-                EnnemyCube ennemyCube = (EnnemyCube) obj;
-                float cubeX = ennemyCube.getX();
-                float cubeY = ennemyCube.getY();
-
-                // Vérifiez si le missile touche le cube ennemi
-                if (missileY > cubeY && missileY < cubeY + 1.0f && missileX > cubeX - 0.5f && missileX < cubeX + 0.5f) {
-                    objects3D.remove(i);
-                    return; // Sortez de la méthode après avoir supprimé le cube
-                }
-            }
-        }
-    }
+//    private void removeEnemyCube(float missileX, float missileY) {
+//        for (int i = 0; i < objects3D.size(); i++) {
+//            GraphicalObject obj = objects3D.get(i);
+//            if (obj instanceof EnnemyCube) {
+//                EnnemyCube ennemyCube = (EnnemyCube) obj;
+//                float cubeX = ennemyCube.getX();
+//                float cubeY = ennemyCube.getY();
+//
+//                // Vérifiez si le missile touche le cube ennemi
+//                if (missileY > cubeY && missileY < cubeY + 1.0f && missileX > cubeX - 0.5f && missileX < cubeX + 0.5f) {
+//                    objects3D.remove(i);
+//                    return; // Sortez de la méthode après avoir supprimé le cube
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void dispose(GLAutoDrawable arg0) {
@@ -206,11 +218,13 @@ public class MainGL extends GLCanvas implements GLEventListener, KeyListener {
         if (key == KeyEvent.VK_Q) {
             playerCube.translateX(-playerCube.getMoveSpeed()); // Move to the left
             System.out.println("CoorX Left : " + playerCube.getX());
+            System.out.println("Cubes ennemis restants" + objects3D.size());
         }
 
         if (key == KeyEvent.VK_D) {
             playerCube.translateX(playerCube.getMoveSpeed()); // Move to the right
             System.out.println("CoorX Right : " + playerCube.getX());
+            System.out.println("Cubes ennemis restants" + objects3D.size());
         }
 
         if (key == KeyEvent.VK_SPACE) {
